@@ -1,0 +1,130 @@
+{
+  "theme": "light",
+  "archetype": "Swiss & High-Contrast mixed with Luxury",
+  "typography": {
+    "headings": {
+      "family": "Playfair Display, serif",
+      "weights": ["400", "700", "900"],
+      "tracking": "tracking-tighter",
+      "instruction": "CRITICAL: Do NOT use Inter, Roboto, or standard sans for headings. Use Playfair Display to establish an editorial, Old Money Tech aesthetic."
+    },
+    "body": {
+      "family": "Manrope, sans-serif",
+      "weights": ["300", "400", "500", "600"],
+      "tracking": "tracking-normal",
+      "instruction": "Use Manrope for all body copy, UI elements, and admin dashboard data."
+    },
+    "scale": {
+      "h1": "text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-[0.9] font-medium",
+      "h2": "text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight",
+      "h3": "text-2xl sm:text-3xl tracking-tight",
+      "h4": "text-lg sm:text-xl uppercase tracking-[0.2em] font-light",
+      "body": "text-base leading-relaxed text-foreground/80",
+      "small": "text-xs uppercase tracking-[0.1em]"
+    }
+  },
+  "colors": {
+    "background": "#FCFCFA",
+    "foreground": "#0A0A0A",
+    "card": "#FFFFFF",
+    "card_foreground": "#0A0A0A",
+    "popover": "#FFFFFF",
+    "popover_foreground": "#0A0A0A",
+    "primary": "#0A0A0A",
+    "primary_foreground": "#FFFFFF",
+    "secondary": "#F3F2F0",
+    "secondary_foreground": "#0A0A0A",
+    "muted": "#EAE8E3",
+    "muted_foreground": "#7A7571",
+    "accent": "#E5E5E5",
+    "accent_foreground": "#0A0A0A",
+    "border": "#E5E5E5",
+    "instruction": "Monochrome dominance. Color is function only. Use stark contrasts to simulate print editorial layouts. Ensure all text meets APCA contrast guidelines."
+  },
+  "visual_enhancers": {
+    "surfaces": {
+      "header": "Crystal Glass variant: backdrop-blur-2xl bg-white/70 with a delicate border-b border-black/5. Never use fully transparent header.",
+      "cards": "Flat, sharp edges or max rounded-none. Subtly outlined border-border, no heavy drop shadows. Hover states should feature subtle image zooms or border darkening.",
+      "modals": "Backdrop-blur with semi-transparent dark overlay bg-black/40."
+    },
+    "borders": "1px crisp lines. Use border-collapse for technical grids in the admin panel.",
+    "hover_states": "Always explicitly define text colors on hover. focus:ring-2 focus:ring-black focus:outline-none."
+  },
+  "components": {
+    "buttons": "Sharp rectangular corners. Dark backgrounds with white text for primary actions. Hover must translate slightly (-translate-y-px) and lighten.",
+    "inputs": "Shadcn based. Sharp rectangular, 1px border. Focus state must be a thin black ring.",
+    "admin_tables": "Dense layouts, thin borders, clear hover states on rows. Minimalist, uncluttered.",
+    "image_containers": "Max height constraints on mobile. Overlapping bento layouts. Subtly darkened overlay on hero images if text is overlaid (bg-black/30).",
+    "tags": "Pill-shaped or small rectangles, uppercase, wide letter spacing."
+  },
+  "grids_and_layouts": {
+    "spacing": "Generous spacing. Use p-8, p-12, py-24. For admin, use tighter p-4, p-6.",
+    "bento_grid": "MODE A (Tetris Grid) for Marketing. Col-span-full for hero, mixed col-span-4 and row-span-2 for asymmetrical tension. Never fill 100% of the grid perfectly. MODE B for Admin Dashboard.",
+    "alignment": "Left align text primarily. Use grid-cols-1 md:grid-cols-12 for fine control."
+  },
+  "motion": {
+    "libraries": "framer-motion, @studio-freight/lenis",
+    "instructions": "MANDATORY: Use lenis for smooth scrolling to give the site premium momentum. Micro-animations on hover (e.g., image scale up slightly within overflow-hidden container). Staggered entrance animations for product grids. Soft fades and smooth transforms.",
+    "accessibility": "Respect prefers-reduced-motion."
+  },
+  "media_and_assets": {
+    "icons": "lucide-react with strokeWidth={1} or {1.2} for a delicate, luxury feel.",
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1659522761084-79196b64abe4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwzfHxmYXNoaW9uJTIwbW9kZWwlMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzgzODM3NjU3fDA&ixlib=rb-4.1.0&q=85",
+        "category": "Hero / Editorial Model",
+        "description": "Person in a white dress, perfect for homepage hero or lookbook header."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1613915617430-8ab0fd7c6baf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwbW9kZWwlMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzgzODM3NjU3fDA&ixlib=rb-4.1.0&q=85",
+        "category": "Lookbook / Collection Showcase",
+        "description": "Woman in black blazer, sophisticated, for collection/trending showcase."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1508964801641-4b2410705b73?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHw0fHxmYXNoaW9uJTIwbW9kZWwlMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzgzODM3NjU3fDA&ixlib=rb-4.1.0&q=85",
+        "category": "Lookbook / Moody Editorial",
+        "description": "Grayscale editorial model for high contrast sections."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1621261027519-a71ac66d5a68?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MTJ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBjbG90aGluZyUyMGJvdXRpcXVlJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzgzODM3NjU3fDA&ixlib=rb-4.1.0&q=85",
+        "category": "Boutique / Store Location",
+        "description": "Interior of luxury boutique with clothing rack."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1769981653696-5ce5a59263bf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MTJ8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBjbG90aGluZyUyMGJvdXRpcXVlJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzgzODM3NjU3fDA&ixlib=rb-4.1.0&q=85",
+        "category": "Boutique / About",
+        "description": "Celine store interior for the about or visit store page."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1713929644020-1cdf48ca0d12?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHw0fHxwcmVtaXVtJTIwY2xvdGhpbmclMjBwcm9kdWN0JTIwc2hvdHxlbnwwfHx8fDE3ODM4Mzc2NTd8MA&ixlib=rb-4.1.0&q=85",
+        "category": "Product Listing",
+        "description": "Apparel flatlay, can be used for mock product entries."
+      }
+    ],
+    "instruction": "NEVER use placeholder images. Stick entirely to this curated list or dynamically generate more if explicitly needed."
+  },
+  "testing": {
+    "attributes": "All interactive and key informational elements MUST include a data-testid attribute in kebab-case."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic outputs. Avoid AI slop.",
+    "Do not use dark colors as gradients.",
+    "Create depth through layered design elements with z-index hierarchy, asymmetrical grids, overlapping images.",
+    "Use glass-morphism effects with backdrop filters.",
+    "You MUST NOT apply universal transition (transition: all). Use transition: transform 0.2s ease, opacity 0.2s ease etc.",
+    "You MUST NOT center align the app container (.App { text-align: center; } is FORBIDDEN).",
+    "Never use AI assistant Emojis for icons.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations.",
+    "Prioritize using pre-existing components from src/components/ui.",
+    "Use 'sonner' for toasts.",
+    "For the showcase, the design must feel like a high-end fashion house digital showroom — editorial, aspirational, with strong typography and cinematic imagery."
+  ],
+  "general_ui_ux_guidelines": [
+    "Implement clear visual hierarchy with typography scale and generous whitespace.",
+    "Ensure all contrast ratios meet WCAG AA standards, preferably APCA.",
+    "Mobile-first responsive design is mandatory. Do not hide primary navigation arbitrarily behind hamburgers on desktop.",
+    "Ensure forms and interactive components have visible focus states.",
+    "Always wrap interactive icons in a button or link with proper aria-labels."
+  ]
+}

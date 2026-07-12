@@ -58,8 +58,8 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between mb-4">
             <div className="eyebrow">Products by Category</div>
           </div>
-          <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-72 min-h-[288px]">
+            <ResponsiveContainer width="100%" height="100%" minHeight={288}>
               <BarChart data={data?.by_category || []}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#00000010" />
                 <XAxis dataKey="name" tick={{ fontSize: 11 }} />

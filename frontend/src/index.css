@@ -2,114 +2,151 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    margin: 0;
-    font-family:
-        -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-    font-family:
-        source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+@layer base {
+  :root {
+    --background: 45 20% 98%;      /* #FCFCFA */
+    --foreground: 0 0% 4%;          /* #0A0A0A */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 14% 95%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 40 12% 91%;
+    --muted-foreground: 30 5% 47%;
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 4%;
+    --gold: 39 42% 55%;             /* subtle gold accent */
+    --radius: 0px;
+  }
+  .dark {
+    --background: 0 0% 6%;
+    --foreground: 40 20% 96%;
+    --card: 0 0% 8%;
+    --card-foreground: 40 20% 96%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 40 20% 96%;
+    --primary: 40 20% 96%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 40 20% 96%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 30 5% 65%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 40 20% 96%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 40 20% 96%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 40 20% 90%;
+  }
 }
 
 @layer base {
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
-    }
-    .dark {
-        --background: 0 0% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
-    }
+  * { @apply border-border; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4, h5, .font-display {
+    font-family: 'Playfair Display', ui-serif, Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  ::selection { background: #0A0A0A; color: #FCFCFA; }
 }
 
-@layer base {
-    * {
-        @apply border-border;
-    }
-    body {
-        @apply bg-background text-foreground;
-    }
+@layer utilities {
+  .font-display { font-family: 'Playfair Display', ui-serif, Georgia, serif; }
+  .font-body { font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif; }
+  .tracking-widerest { letter-spacing: 0.24em; }
+  .eyebrow {
+    @apply text-xs uppercase tracking-widerest text-muted-foreground font-medium;
+  }
+  .container-x { @apply max-w-[1440px] mx-auto px-6 md:px-10 lg:px-14; }
+  .hairline { @apply border-t border-black/10 dark:border-white/10; }
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 300ms ease;
+  }
+  .link-underline:hover { background-size: 100% 1px; }
+
+  .glass-header {
+    backdrop-filter: blur(24px) saturate(140%);
+    background-color: rgba(252, 252, 250, 0.72);
+  }
+  .dark .glass-header {
+    background-color: rgba(10, 10, 10, 0.72);
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+  }
+  .image-zoom-wrap { overflow: hidden; }
+  .image-zoom-wrap img {
+    transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+  }
+  .image-zoom-wrap:hover img { transform: scale(1.06); }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-foreground text-background px-6 py-3 text-xs uppercase tracking-widerest font-medium;
+    transition: transform 200ms ease, background-color 200ms ease;
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border border-foreground text-foreground px-6 py-3 text-xs uppercase tracking-widerest font-medium;
+    transition: transform 200ms ease, background-color 200ms ease, color 200ms ease;
+  }
+  .btn-outline:hover { @apply bg-foreground text-background; transform: translateY(-1px); }
+
+  .gold { color: hsl(var(--gold)); }
+  .bg-gold { background-color: hsl(var(--gold)); }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
 
-@layer base {
-    [data-debug-wrapper="true"] {
-        display: contents !important;
-    }
+/* Marquee */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track {
+  display: flex;
+  gap: 3rem;
+  animation: marquee 40s linear infinite;
+  width: max-content;
+}
 
-    [data-debug-wrapper="true"] > * {
-        margin-left: inherit;
-        margin-right: inherit;
-        margin-top: inherit;
-        margin-bottom: inherit;
-        padding-left: inherit;
-        padding-right: inherit;
-        padding-top: inherit;
-        padding-bottom: inherit;
-        column-gap: inherit;
-        row-gap: inherit;
-        gap: inherit;
-        border-left-width: inherit;
-        border-right-width: inherit;
-        border-top-width: inherit;
-        border-bottom-width: inherit;
-        border-left-style: inherit;
-        border-right-style: inherit;
-        border-top-style: inherit;
-        border-bottom-style: inherit;
-        border-left-color: inherit;
-        border-right-color: inherit;
-        border-top-color: inherit;
-        border-bottom-color: inherit;
-    }
+/* Reveal */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal { animation: reveal-up 0.9s cubic-bezier(.2,.7,.2,1) both; }
+
+/* Zoom cursor for product images */
+.zoom-cursor { cursor: zoom-in; }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .reveal { animation: none; }
+  .image-zoom-wrap img { transition: none; }
 }

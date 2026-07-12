@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/api";
+import { formatINR } from "@/lib/format";
 import { Link } from "react-router-dom";
 import { ShoppingBag, Tag, Building2, Percent, MessageSquare, AlertTriangle, Mail, TrendingUp } from "lucide-react";
 import {
@@ -50,7 +51,7 @@ export default function AdminDashboard() {
         <Metric icon={MessageSquare} label="Inquiries" value={data?.total_inquiries} foot={`${data?.new_inquiries || 0} new`} to="/admin/inquiries" />
         <Metric icon={AlertTriangle} label="Low Stock" value={data?.low_stock} foot={data?.low_stock ? "needs restock" : "all clear"} tone={data?.low_stock ? "warn" : ""} to="/admin/products?low=1" />
         <Metric icon={Mail} label="Newsletter" value={data?.newsletter_subs} foot="subscribers" />
-        <Metric icon={TrendingUp} label="Stock Value" value={`$${Math.round((data?.total_stock_value || 0)).toLocaleString()}`} foot="wholesale" />
+        <Metric icon={TrendingUp} label="Stock Value" value={formatINR(Math.round(data?.total_stock_value || 0))} foot="wholesale" />
       </div>
 
       <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -78,7 +79,7 @@ export default function AdminDashboard() {
                 <img src={p.images?.[0]} alt="" className="w-12 h-14 object-cover" />
                 <div className="min-w-0 flex-1">
                   <Link to={`/admin/products?edit=${p.id}`} className="link-underline text-sm block truncate">{p.name}</Link>
-                  <div className="text-xs text-foreground/60">{p.views || 0} views · ${p.price}</div>
+                  <div className="text-xs text-foreground/60">{p.views || 0} views · {formatINR(p.price)}</div>
                 </div>
               </li>
             ))}

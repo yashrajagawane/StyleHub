@@ -6,6 +6,7 @@ import ProductCard from "@/components/ProductCard";
 import { useWishlist } from "@/context/WishlistContext";
 import { Heart, Share2, Phone, MessageCircle, MapPin, ChevronRight, ZoomIn } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatINR } from "@/lib/format";
 import { toast } from "sonner";
 
 function CopyLinkBtn() {
@@ -138,8 +139,8 @@ export default function ProductDetail() {
           <p className="mt-4 text-foreground/70">{p.short_description || p.description?.slice(0, 160)}</p>
 
           <div className="mt-6 flex items-end gap-4">
-            {hasDiscount && <span className="line-through text-foreground/40 text-lg">${p.price}</span>}
-            <span className="font-display text-4xl">${displayPrice}</span>
+            {hasDiscount && <span className="line-through text-foreground/40 text-lg">{formatINR(p.price)}</span>}
+            <span className="font-display text-4xl">{formatINR(displayPrice)}</span>
           </div>
 
           <div className={cn("mt-2 text-xs uppercase tracking-widerest", p.stock > 0 ? "text-foreground/60" : "text-destructive")}>

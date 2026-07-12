@@ -4,6 +4,7 @@ import api from "@/lib/api";
 import { Plus, Pencil, Trash2, X, Minus } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { formatINR } from "@/lib/format";
 import { useSearchParams } from "react-router-dom";
 
 const empty = {
@@ -110,7 +111,7 @@ export default function AdminProducts() {
                 <td className="px-4 py-3 font-mono text-xs">{p.sku}</td>
                 <td className="px-4 py-3">{catMap[p.category_id]?.name || "—"}</td>
                 <td className="px-4 py-3">{brandMap[p.brand_id]?.name || "—"}</td>
-                <td className="px-4 py-3">${p.discount_price || p.price}{p.discount_price ? <span className="text-foreground/40 line-through ml-1">${p.price}</span> : null}</td>
+                <td className="px-4 py-3">{formatINR(p.discount_price || p.price)}{p.discount_price ? <span className="text-foreground/40 line-through ml-1">{formatINR(p.price)}</span> : null}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     <button onClick={() => stockMut.mutate({ id: p.id, delta: -1 })} className="p-1 border border-foreground/20 hover:border-foreground"><Minus size={12} /></button>

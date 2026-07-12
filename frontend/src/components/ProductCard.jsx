@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { cn } from "@/lib/utils";
+import { formatINR } from "@/lib/format";
 
 function Badge({ children, tone = "dark" }) {
   return (
@@ -72,8 +73,8 @@ export default function ProductCard({ p, priority = false }) {
         </div>
         <div className="text-right shrink-0">
           <div className="font-body text-sm">
-            {hasDiscount && <span className="line-through text-foreground/40 mr-2">${p.price}</span>}
-            <span>${displayPrice}</span>
+            {hasDiscount && <span className="line-through text-foreground/40 mr-2">{formatINR(p.price)}</span>}
+            <span>{formatINR(displayPrice)}</span>
           </div>
           <div className={cn("mt-1 text-[10px] uppercase tracking-widerest", p.stock > 0 ? "text-foreground/60" : "text-destructive")}>
             {p.stock > 0 ? "In shop" : "Sold out"}

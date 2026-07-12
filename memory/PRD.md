@@ -27,6 +27,7 @@ Original spec called for Next.js 15 + Express + PostgreSQL + Prisma + Docker; en
 ### Public site
 - Home (hero + editorial), Products (filters + sort + search + pagination), Product Detail (gallery + zoom + WhatsApp/Call/Visit/Wishlist CTAs + related), Categories, Brands, Offers, Gallery (with lightbox + tabs), About, Contact (form + Google map), Wishlist, Privacy, Terms, 404.
 - Global: navbar with search / theme / wishlist counter / admin, footer with newsletter, mobile drawer, dark/light theme toggle, luxury animations.
+- **Currency**: switched to Indian Rupees (₹) with `en-IN` formatting via `lib/format.js`.
 
 ### Admin
 - Login (seeded credentials pre-filled)
@@ -35,6 +36,26 @@ Original spec called for Next.js 15 + Express + PostgreSQL + Prisma + Docker; en
 - Categories, Brands, Offers, Banners, Gallery, Testimonials (via CrudManager)
 - Inquiries (tabs by status, mark read/replied/archived, delete, view detail)
 - Store Settings (name, tagline, contact, hours, socials, map coords, about)
+
+## Implemented (v2 — 2026-01-12) — WhatsApp Automation
+### Public
+- **Two WhatsApp CTAs on every product page**: *Reserve via WhatsApp* (primary) and *WhatsApp Inquiry* (secondary). Messages generated from admin-editable templates with tokens `{product_name} {sku} {brand} {price} {size} {color} {product_url} {store}`. Hrefs update live as user changes size/color.
+- **Message preview**: expandable `<details>` block on product detail shows the composed message.
+- **Floating WhatsApp bubble** on all public pages (never on `/admin/*`), with dismiss-for-session button.
+- **Click tracking**: every WhatsApp click POSTs to `/api/whatsapp/track` (anonymous, non-blocking).
+
+### Admin
+- **Store Settings** — WhatsApp Automation section: toggles for product buttons + floating bubble, editable templates for floating greeting, inquiry, and reservation.
+- **Dashboard** — new "WhatsApp — last 30 days" section with 4 metric cards (Total, Inquiries, Reservations, Floating clicks), timeline line chart, and "Most contacted products" list.
+
+### Backend
+- New endpoints: `POST /api/whatsapp/track` (public), `GET /api/whatsapp/analytics` (admin).
+- Extended `/api/analytics/summary` with `whatsapp_total / whatsapp_inquiries / whatsapp_reservations`.
+- New collection `whatsapp_events` (append-only).
+- Settings loader auto-merges new default keys into existing docs (forward-compat).
+
+### Utility
+- Reusable `/app/frontend/src/lib/whatsapp.js` — `generateWhatsAppURL`, `buildWhatsAppLink`, `renderTemplate`, `normalisePhone`, `trackWhatsAppClick`.
 
 ### APIs
 - `/api/auth/login`, `/api/auth/me`

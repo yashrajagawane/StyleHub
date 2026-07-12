@@ -234,6 +234,34 @@ class StoreSettings(BaseModel):
         "twitter": "https://twitter.com/stylehub",
         "pinterest": "https://pinterest.com/stylehub",
     })
+    # ----- WhatsApp Automation -----
+    whatsapp_enabled: bool = True
+    whatsapp_floating_enabled: bool = True
+    whatsapp_floating_message: str = (
+        "Hi StyleHub — I was browsing your site and would like some help."
+    )
+    whatsapp_inquiry_message: str = (
+        "Hi StyleHub!\n\nI'd like more information about this piece:\n\n"
+        "• {product_name}\n"
+        "• SKU: {sku}\n"
+        "• Brand: {brand}\n"
+        "• Price: {price}\n"
+        "• Size: {size}\n"
+        "• Color: {color}\n\n"
+        "Link: {product_url}\n\n"
+        "Could you please confirm availability?"
+    )
+    whatsapp_reserve_message: str = (
+        "Hi StyleHub — I'd like to reserve this piece for pickup:\n\n"
+        "• {product_name}\n"
+        "• SKU: {sku}\n"
+        "• Brand: {brand}\n"
+        "• Price: {price}\n"
+        "• Size: {size}\n"
+        "• Color: {color}\n\n"
+        "Link: {product_url}\n\n"
+        "When would be a good time to visit?"
+    )
 
 
 # ---------- Auth utilities ----------
@@ -285,7 +313,12 @@ async def get_settings() -> dict:
         default["updated_at"] = now_iso()
         await upsert_settings(default)
         return default
-    return doc
+    # Merge missing keys from defaults (forward-compat for schema additions).
+    defaults = StoreSettings().model_dump()
+    merged = {**defaults, **doc}
+    if merged != doc:
+        await upsert_settings(merged)
+    return merged
 
 
 def clean(doc: dict) -> dict:
@@ -639,6 +672,12 @@ async def analytics_summary(admin=Depends(get_current_admin)):
     async for p in db.products.find({}, {"_id": 0, "price": 1, "stock": 1}):
         total_stock_value += (p.get("price", 0) or 0) * (p.get("stock", 0) or 0)
 
+    # WhatsApp counters (30-day window)
+    since_30 = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+    wa_total = await db.whatsapp_events.count_documents({"created_at": {"$gte": since_30}})
+    wa_inquiries = await db.whatsapp_events.count_documents({"created_at": {"$gte": since_30}, "event_type": "inquiry"})
+    wa_reservations = await db.whatsapp_events.count_documents({"created_at": {"$gte": since_30}, "event_type": "reserve"})
+
     return {
         "total_products": total_products,
         "active_products": active_products,
@@ -652,6 +691,92 @@ async def analytics_summary(admin=Depends(get_current_admin)):
         "top_products": top_products,
         "by_category": by_category,
         "total_stock_value": round(total_stock_value, 2),
+        "whatsapp_total": wa_total,
+        "whatsapp_inquiries": wa_inquiries,
+        "whatsapp_reservations": wa_reservations,
+    }
+
+
+# ---------- WhatsApp Automation ----------
+class WhatsAppEventIn(BaseModel):
+    event_type: Literal["inquiry", "reserve", "floating"]
+    product_id: Optional[str] = None
+    product_name: Optional[str] = None
+    product_sku: Optional[str] = None
+    size: Optional[str] = None
+    color: Optional[str] = None
+    source_url: Optional[str] = None
+
+
+@api_router.post("/whatsapp/track")
+async def whatsapp_track(payload: WhatsAppEventIn):
+    """Public endpoint to log a WhatsApp click. Rate-limited by short unique id."""
+    doc = {
+        "id": new_id(),
+        "created_at": now_iso(),
+        **payload.model_dump(),
+    }
+    await db.whatsapp_events.insert_one(doc)
+    return {"ok": True, "id": doc["id"]}
+
+
+@api_router.get("/whatsapp/analytics")
+async def whatsapp_analytics(admin=Depends(get_current_admin), days: int = 30):
+    since = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    q_since = {"created_at": {"$gte": since}}
+
+    total = await db.whatsapp_events.count_documents(q_since)
+    inquiries = await db.whatsapp_events.count_documents({**q_since, "event_type": "inquiry"})
+    reservations = await db.whatsapp_events.count_documents({**q_since, "event_type": "reserve"})
+    floating = await db.whatsapp_events.count_documents({**q_since, "event_type": "floating"})
+
+    # Most contacted products
+    pipeline = [
+        {"$match": {**q_since, "product_id": {"$ne": None}}},
+        {"$group": {
+            "_id": "$product_id",
+            "count": {"$sum": 1},
+            "inquiries": {"$sum": {"$cond": [{"$eq": ["$event_type", "inquiry"]}, 1, 0]}},
+            "reservations": {"$sum": {"$cond": [{"$eq": ["$event_type", "reserve"]}, 1, 0]}},
+            "product_name": {"$last": "$product_name"},
+            "product_sku": {"$last": "$product_sku"},
+        }},
+        {"$sort": {"count": -1}},
+        {"$limit": 10},
+    ]
+    top = await db.whatsapp_events.aggregate(pipeline).to_list(10)
+    top_products = [
+        {
+            "product_id": t["_id"],
+            "name": t.get("product_name") or "—",
+            "sku": t.get("product_sku") or "",
+            "count": t["count"],
+            "inquiries": t["inquiries"],
+            "reservations": t["reservations"],
+        }
+        for t in top
+    ]
+
+    # Timeline (last N days grouped by day)
+    timeline_pipe = [
+        {"$match": q_since},
+        {"$group": {
+            "_id": {"$substr": ["$created_at", 0, 10]},
+            "count": {"$sum": 1},
+        }},
+        {"$sort": {"_id": 1}},
+    ]
+    timeline_raw = await db.whatsapp_events.aggregate(timeline_pipe).to_list(days + 5)
+    timeline = [{"day": t["_id"], "count": t["count"]} for t in timeline_raw]
+
+    return {
+        "range_days": days,
+        "total_clicks": total,
+        "inquiries": inquiries,
+        "reservations": reservations,
+        "floating_clicks": floating,
+        "top_products": top_products,
+        "timeline": timeline,
     }
 
 

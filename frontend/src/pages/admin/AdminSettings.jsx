@@ -79,6 +79,73 @@ export default function AdminSettings() {
             ))}
           </div>
         </div>
+
+        {/* ---------- WhatsApp Automation ---------- */}
+        <div className="md:col-span-6 border-t border-foreground/10 pt-8 mt-4">
+          <div className="eyebrow mb-1">WhatsApp Automation</div>
+          <h2 className="font-display text-2xl">Product & floating chat</h2>
+          <p className="mt-2 text-xs text-foreground/60 max-w-lg">
+            Templates support these tokens: <code className="font-mono">{"{product_name} {sku} {brand} {price} {size} {color} {product_url} {store}"}</code>.
+            Empty tokens render as an em-dash.
+          </p>
+        </div>
+
+        <div className="md:col-span-3">
+          <label className="inline-flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={!!form.whatsapp_enabled}
+              onChange={(e) => set("whatsapp_enabled", e.target.checked)}
+              data-testid="ss-whatsapp_enabled"
+            />
+            <span>Enable WhatsApp buttons on products</span>
+          </label>
+        </div>
+
+        <div className="md:col-span-3">
+          <label className="inline-flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={!!form.whatsapp_floating_enabled}
+              onChange={(e) => set("whatsapp_floating_enabled", e.target.checked)}
+              data-testid="ss-whatsapp_floating_enabled"
+            />
+            <span>Show floating WhatsApp bubble on all public pages</span>
+          </label>
+        </div>
+
+        <div className="md:col-span-6">
+          <label className="eyebrow block mb-2">Floating bubble greeting</label>
+          <textarea
+            rows={2}
+            value={form.whatsapp_floating_message ?? ""}
+            onChange={(e) => set("whatsapp_floating_message", e.target.value)}
+            className="w-full border border-foreground/20 bg-transparent px-3 py-2 text-sm"
+            data-testid="ss-whatsapp_floating_message"
+          />
+        </div>
+
+        <div className="md:col-span-6">
+          <label className="eyebrow block mb-2">Inquiry message template</label>
+          <textarea
+            rows={7}
+            value={form.whatsapp_inquiry_message ?? ""}
+            onChange={(e) => set("whatsapp_inquiry_message", e.target.value)}
+            className="w-full border border-foreground/20 bg-transparent px-3 py-2 text-sm font-mono"
+            data-testid="ss-whatsapp_inquiry_message"
+          />
+        </div>
+
+        <div className="md:col-span-6">
+          <label className="eyebrow block mb-2">Reservation message template</label>
+          <textarea
+            rows={7}
+            value={form.whatsapp_reserve_message ?? ""}
+            onChange={(e) => set("whatsapp_reserve_message", e.target.value)}
+            className="w-full border border-foreground/20 bg-transparent px-3 py-2 text-sm font-mono"
+            data-testid="ss-whatsapp_reserve_message"
+          />
+        </div>
       </div>
 
       <button disabled={mut.isPending} className="btn-primary mt-8" data-testid="ss-save">{mut.isPending ? "Saving..." : "Save settings"}</button>

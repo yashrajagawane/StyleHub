@@ -226,3 +226,100 @@ class TestAnalytics:
                   "top_products", "total_stock_value"):
             assert k in d
         assert d["total_products"] >= 12
+
+
+
+# ---- WhatsApp Automation ----
+class TestWhatsApp:
+    def test_settings_has_whatsapp_defaults(self, s):
+        d = s.get(f"{API}/settings").json()
+        for k in ("whatsapp_enabled", "whatsapp_floating_enabled",
+                  "whatsapp_floating_message", "whatsapp_inquiry_message",
+                  "whatsapp_reserve_message"):
+            assert k in d, f"Missing WA field: {k}"
+        assert isinstance(d["whatsapp_enabled"], bool)
+        assert isinstance(d["whatsapp_floating_enabled"], bool)
+
+    def test_settings_update_wa_fields(self, s, auth_headers):
+        cur = s.get(f"{API}/settings").json()
+        original = {k: cur.get(k) for k in (
+            "whatsapp_enabled", "whatsapp_floating_enabled",
+            "whatsapp_floating_message", "whatsapp_inquiry_message",
+            "whatsapp_reserve_message")}
+        cur["whatsapp_enabled"] = True
+        cur["whatsapp_floating_enabled"] = False
+        cur["whatsapp_floating_message"] = "TEST_FLOAT"
+        cur["whatsapp_inquiry_message"] = "TEST_INQ {product_name}"
+        cur["whatsapp_reserve_message"] = "TEST_RES {sku}"
+        r = s.put(f"{API}/settings", json=cur, headers=auth_headers)
+        assert r.status_code == 200
+        rd = r.json()
+        assert rd["whatsapp_floating_enabled"] is False
+        assert rd["whatsapp_floating_message"] == "TEST_FLOAT"
+        # verify persistence
+        after = s.get(f"{API}/settings").json()
+        assert after["whatsapp_inquiry_message"] == "TEST_INQ {product_name}"
+        assert after["whatsapp_reserve_message"] == "TEST_RES {sku}"
+        # restore
+        for k, v in original.items():
+            cur[k] = v
+        s.put(f"{API}/settings", json=cur, headers=auth_headers)
+
+    def test_track_event(self, s):
+        payload = {
+            "event_type": "inquiry",
+            "product_id": "test-prod-1",
+            "product_name": "TEST_WA_Product",
+            "product_sku": "TEST-WA-SKU",
+            "size": "M",
+            "color": "Black",
+            "source_url": "https://example.com/products/x",
+        }
+        r = s.post(f"{API}/whatsapp/track", json=payload)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["ok"] is True
+        assert d["id"]
+
+    def test_track_invalid_event_type(self, s):
+        r = s.post(f"{API}/whatsapp/track", json={"event_type": "bogus"})
+        assert r.status_code in (400, 422)
+
+    def test_analytics_requires_admin(self, s):
+        assert s.get(f"{API}/whatsapp/analytics").status_code in (401, 403)
+
+    def test_analytics_and_counts_increment(self, s, auth_headers):
+        # Baseline
+        base = s.get(f"{API}/whatsapp/analytics", headers=auth_headers).json()
+        b_total = base["total_clicks"]
+        b_inq = base["inquiries"]
+        b_res = base["reservations"]
+        b_float = base["floating_clicks"]
+
+        # Emit 3 events (1 each type)
+        for ev in ("inquiry", "reserve", "floating"):
+            r = s.post(f"{API}/whatsapp/track", json={
+                "event_type": ev,
+                "product_id": "wa-test-prod",
+                "product_name": "TEST_WA_Analytics",
+                "product_sku": "TEST-WA-AN",
+            })
+            assert r.status_code == 200
+
+        after = s.get(f"{API}/whatsapp/analytics", headers=auth_headers).json()
+        assert after["total_clicks"] >= b_total + 3
+        assert after["inquiries"] >= b_inq + 1
+        assert after["reservations"] >= b_res + 1
+        assert after["floating_clicks"] >= b_float + 1
+        assert isinstance(after["top_products"], list)
+        assert isinstance(after["timeline"], list)
+        # our product should be in top_products
+        assert any(p["product_id"] == "wa-test-prod" for p in after["top_products"])
+
+    def test_summary_includes_wa_fields(self, s, auth_headers):
+        r = s.get(f"{API}/analytics/summary", headers=auth_headers)
+        assert r.status_code == 200
+        d = r.json()
+        for k in ("whatsapp_total", "whatsapp_inquiries", "whatsapp_reservations"):
+            assert k in d, f"Missing {k} in summary"
+            assert isinstance(d[k], int)

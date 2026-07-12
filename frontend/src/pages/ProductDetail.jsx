@@ -7,6 +7,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { Heart, Share2, Phone, MessageCircle, MapPin, ChevronRight, ZoomIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatINR } from "@/lib/format";
+import { buildWhatsAppLink, trackWhatsAppClick } from "@/lib/whatsapp";
 import { toast } from "sonner";
 
 function CopyLinkBtn() {
@@ -39,6 +40,14 @@ export default function ProductDetail() {
     queryFn: () => publicApi.related(p.id),
     enabled: !!p?.id,
   });
+  const { data: brands } = useQuery({
+    queryKey: ["brands-all-public"],
+    queryFn: () => publicApi.brands({ active: true }),
+  });
+  const brandName = useMemo(() => {
+    if (!p?.brand_id) return "";
+    return (brands?.items || []).find((b) => b.id === p.brand_id)?.name || "";
+  }, [p?.brand_id, brands]);
 
   useEffect(() => {
     // Recently viewed
@@ -60,14 +69,40 @@ export default function ProductDetail() {
   const hasDiscount = p?.discount_price && p.discount_price < p.price;
   const displayPrice = hasDiscount ? p.discount_price : p?.price;
 
-  const whatsappHref = useMemo(() => {
-    if (!p) return "#";
-    const num = (settings?.whatsapp || "").replace(/\D/g, "");
-    const text = encodeURIComponent(
-      `Hi StyleHub — I'd like to reserve "${p.name}" (SKU ${p.sku}${size ? `, size ${size}` : ""}${color ? `, ${color}` : ""}). Is it available?`
-    );
-    return `https://wa.me/${num}?text=${text}`;
-  }, [p, size, color, settings]);
+  // WhatsApp — live-updated as user changes size/color/etc.
+  const waVars = useMemo(() => ({
+    product_name: p?.name || "",
+    sku: p?.sku || "",
+    brand: brandName || "—",
+    price: p ? formatINR(displayPrice) : "",
+    size: size || "—",
+    color: color || "—",
+    product_url: typeof window !== "undefined" ? window.location.href : "",
+    store: settings?.store_name || "StyleHub",
+  }), [p, brandName, displayPrice, size, color, settings]);
+
+  const waInquiry = useMemo(() => buildWhatsAppLink({
+    phone: settings?.whatsapp,
+    template: settings?.whatsapp_inquiry_message,
+    vars: waVars,
+  }), [settings, waVars]);
+
+  const waReserve = useMemo(() => buildWhatsAppLink({
+    phone: settings?.whatsapp,
+    template: settings?.whatsapp_reserve_message,
+    vars: waVars,
+  }), [settings, waVars]);
+
+  const whatsappEnabled = settings?.whatsapp_enabled !== false && !!waInquiry.url;
+
+  const trackClick = (event_type) => trackWhatsAppClick({
+    event_type,
+    product_id: p?.id,
+    product_name: p?.name,
+    product_sku: p?.sku,
+    size: size || null,
+    color: color || null,
+  });
 
   if (isLoading || !p) {
     return <div className="container-x py-16">
@@ -181,19 +216,52 @@ export default function ProductDetail() {
 
           {/* CTAs — NO CART / CHECKOUT */}
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <a href={whatsappHref} target="_blank" rel="noreferrer" className="btn-primary" data-testid="whatsapp-cta">
-              <MessageCircle size={14} strokeWidth={1.5} /> WhatsApp to Reserve
-            </a>
-            <a href={`tel:${settings?.phone || ""}`} className="btn-outline" data-testid="call-cta">
+            {whatsappEnabled && (
+              <>
+                <a
+                  href={waReserve.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => trackClick("reserve")}
+                  className="btn-primary"
+                  data-testid="whatsapp-reserve-cta"
+                >
+                  <MessageCircle size={14} strokeWidth={1.5} /> Reserve via WhatsApp
+                </a>
+                <a
+                  href={waInquiry.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => trackClick("inquiry")}
+                  className="btn-outline"
+                  data-testid="whatsapp-inquiry-cta"
+                >
+                  <MessageCircle size={14} strokeWidth={1.5} /> WhatsApp Inquiry
+                </a>
+              </>
+            )}
+            <a href={`tel:${settings?.phone || ""}`} className={cn("btn-outline", !whatsappEnabled && "sm:col-span-2 btn-primary")} data-testid="call-cta">
               <Phone size={14} strokeWidth={1.5} /> Call to Reserve
             </a>
             <Link to="/contact" className="btn-outline" data-testid="visit-store-cta">
               <MapPin size={14} strokeWidth={1.5} /> Visit Store
             </Link>
-            <button onClick={() => toggle(p.id)} className={cn("inline-flex items-center justify-center gap-2 px-6 py-3 text-xs uppercase tracking-widerest border", wished ? "bg-foreground text-background border-foreground" : "border-foreground")} data-testid="wishlist-btn">
-              <Heart size={14} strokeWidth={1.5} className={wished ? "fill-current" : ""} /> {wished ? "Saved" : "Save to Wishlist"}
+            <button onClick={() => toggle(p.id)} className={cn("inline-flex items-center justify-center gap-2 px-6 py-3 text-xs uppercase tracking-widerest border sm:col-span-2", wished ? "bg-foreground text-background border-foreground" : "border-foreground")} data-testid="wishlist-btn">
+              <Heart size={14} strokeWidth={1.5} className={wished ? "fill-current" : ""} /> {wished ? "Saved to Wishlist" : "Save to Wishlist"}
             </button>
           </div>
+
+          {/* Message preview */}
+          {whatsappEnabled && (
+            <details className="mt-4 group" data-testid="whatsapp-preview">
+              <summary className="text-[11px] uppercase tracking-widerest text-foreground/50 cursor-pointer hover:text-foreground select-none">
+                Preview the WhatsApp message
+              </summary>
+              <div className="mt-3 border border-foreground/10 bg-secondary/50 p-4 text-xs whitespace-pre-line font-mono text-foreground/80 leading-relaxed">
+                {waReserve.message}
+              </div>
+            </details>
+          )}
 
           <div className="mt-3 flex justify-start">
             <CopyLinkBtn />

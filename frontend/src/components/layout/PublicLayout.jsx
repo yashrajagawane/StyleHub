@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import { useQuery } from "@tanstack/react-query";
 import { publicApi } from "@/lib/api";
 
@@ -18,6 +19,7 @@ export default function PublicLayout() {
         <Outlet context={{ settings }} />
       </main>
       <Footer settings={settings} />
+      <FloatingWhatsApp />
     </div>
   );
 }

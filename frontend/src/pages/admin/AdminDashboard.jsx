@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Tag, Building2, Percent, MessageSquare, AlertTriangle, Mail, TrendingUp } from "lucide-react";
+import { ShoppingBag, Tag, Building2, Percent, MessageSquare, AlertTriangle, Mail, TrendingUp, MessageCircle, Send } from "lucide-react";
 import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
@@ -35,6 +37,10 @@ export default function AdminDashboard() {
     queryKey: ["analytics"],
     queryFn: () => api.get("/analytics/summary").then((r) => r.data),
   });
+  const { data: wa } = useQuery({
+    queryKey: ["whatsapp-analytics"],
+    queryFn: () => api.get("/whatsapp/analytics", { params: { days: 30 } }).then((r) => r.data),
+  });
 
   return (
     <div data-testid="admin-dashboard">
@@ -52,6 +58,56 @@ export default function AdminDashboard() {
         <Metric icon={AlertTriangle} label="Low Stock" value={data?.low_stock} foot={data?.low_stock ? "needs restock" : "all clear"} tone={data?.low_stock ? "warn" : ""} to="/admin/products?low=1" />
         <Metric icon={Mail} label="Newsletter" value={data?.newsletter_subs} foot="subscribers" />
         <Metric icon={TrendingUp} label="Stock Value" value={formatINR(Math.round(data?.total_stock_value || 0))} foot="wholesale" />
+      </div>
+
+      {/* WhatsApp analytics */}
+      <div className="mt-10">
+        <div className="flex items-end justify-between mb-4">
+          <div>
+            <div className="eyebrow">WhatsApp — last 30 days</div>
+            <h2 className="font-display text-2xl md:text-3xl">Chat & reservations</h2>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Metric icon={MessageCircle} label="Total WA clicks" value={data?.whatsapp_total ?? 0} foot="last 30 days" />
+          <Metric icon={Send} label="Inquiries" value={data?.whatsapp_inquiries ?? 0} foot="product page" />
+          <Metric icon={MessageCircle} label="Reservations" value={data?.whatsapp_reservations ?? 0} foot="product page" tone={data?.whatsapp_reservations ? "" : ""} />
+          <Metric icon={MessageCircle} label="Floating chat" value={wa?.floating_clicks ?? 0} foot="bubble opens" />
+        </div>
+
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 border border-foreground/10 p-6 bg-card">
+            <div className="eyebrow mb-4">Clicks over time</div>
+            <div className="h-56 min-h-[224px]">
+              <ResponsiveContainer width="100%" height="100%" minHeight={224}>
+                <LineChart data={wa?.timeline || []}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#00000010" />
+                  <XAxis dataKey="day" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
+                  <Tooltip contentStyle={{ border: "1px solid #00000020", background: "white" }} />
+                  <Line type="monotone" dataKey="count" stroke="#25D366" strokeWidth={2} dot={{ r: 3 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div className="border border-foreground/10 p-6 bg-card">
+            <div className="eyebrow mb-4">Most contacted products</div>
+            <ul className="space-y-3" data-testid="wa-top-products">
+              {(wa?.top_products || []).map((p) => (
+                <li key={p.product_id} className="flex items-start justify-between gap-3 text-sm">
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate">{p.name}</div>
+                    <div className="text-xs text-foreground/60">{p.sku} · {p.inquiries} inq · {p.reservations} res</div>
+                  </div>
+                  <div className="font-display text-xl">{p.count}</div>
+                </li>
+              ))}
+              {(!wa?.top_products || wa.top_products.length === 0) && (
+                <li className="text-sm text-foreground/60">No WhatsApp clicks yet.</li>
+              )}
+            </ul>
+          </div>
+        </div>
       </div>
 
       <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">

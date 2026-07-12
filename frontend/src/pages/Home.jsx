@@ -150,7 +150,7 @@ export default function Home() {
         <div className="marquee-track">
           {[...(brands?.items || []), ...(brands?.items || [])].map((b, i) => (
             <Link
-              key={i}
+              key={`marquee-${i}-${b.id}`}
               to={`/products?brand_id=${b.id}`}
               className="font-display text-3xl md:text-5xl opacity-40 hover:opacity-100 transition-opacity whitespace-nowrap"
             >

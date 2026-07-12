@@ -47,12 +47,14 @@ export default function ProductDetail() {
       const cur = JSON.parse(localStorage.getItem(key) || "[]").filter((x) => x !== p.id);
       cur.unshift(p.id);
       localStorage.setItem(key, JSON.stringify(cur.slice(0, 10)));
-    } catch {}
+    } catch (err) {
+      console.warn("Could not persist recently-viewed:", err);
+    }
     window.scrollTo({ top: 0, behavior: "instant" });
     setActiveImg(0);
     setSize(p.sizes?.[0] || "");
     setColor(p.colors?.[0] || "");
-  }, [p?.id]);
+  }, [p?.id, p?.sizes, p?.colors]);
 
   const hasDiscount = p?.discount_price && p.discount_price < p.price;
   const displayPrice = hasDiscount ? p.discount_price : p?.price;
@@ -97,7 +99,7 @@ export default function ProductDetail() {
             <div className="hidden md:flex md:col-span-1 flex-col gap-3">
               {(p.images || []).map((img, i) => (
                 <button
-                  key={i}
+                  key={`thumb-${i}-${img}`}
                   onClick={() => setActiveImg(i)}
                   className={cn("aspect-[4/5] bg-secondary image-zoom-wrap border", i === activeImg ? "border-foreground" : "border-transparent")}
                   data-testid={`thumb-${i}`}
@@ -114,7 +116,7 @@ export default function ProductDetail() {
             </div>
             <div className="md:hidden flex gap-2 overflow-x-auto no-scrollbar">
               {(p.images || []).map((img, i) => (
-                <button key={i} onClick={() => setActiveImg(i)} className={cn("min-w-[64px] aspect-square bg-secondary border", i === activeImg ? "border-foreground" : "border-transparent")}>
+                <button key={`mthumb-${i}-${img}`} onClick={() => setActiveImg(i)} className={cn("min-w-[64px] aspect-square bg-secondary border", i === activeImg ? "border-foreground" : "border-transparent")}>
                   <img src={img} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}

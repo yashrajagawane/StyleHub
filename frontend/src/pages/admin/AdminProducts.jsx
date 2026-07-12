@@ -221,7 +221,7 @@ function ProductForm({ initial, cats, brands, onClose, onSubmit, submitting }) {
             <textarea rows={2} value={(f.images || []).join(", ")} onChange={(e) => set("images", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))} className="input" data-testid="pf-images" />
             {(f.images || []).length > 0 && (
               <div className="mt-2 flex gap-2 overflow-x-auto no-scrollbar">
-                {f.images.map((url, i) => <img key={i} src={url} alt="" className="w-16 h-20 object-cover border border-foreground/10" />)}
+                {f.images.map((url, i) => <img key={`${url}-${i}`} src={url} alt="" className="w-16 h-20 object-cover border border-foreground/10" />)}
               </div>
             )}
           </Field>

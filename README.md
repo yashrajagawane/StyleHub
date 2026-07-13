@@ -1,131 +1,174 @@
-# StyleHub — Digital Boutique Showcase & Inventory Platform
+<div align="center">
 
-> A production-ready **digital showroom** and **inventory back-office** for a physical clothing boutique.
-> **Not** an e-commerce site: customers browse online, then visit the store to buy. The shop owner runs
-> the entire catalogue, CMS, and analytics from a single admin dashboard.
+# 🛍️ StyleHub
 
-Live demo: https://style-hub-tau-ruby.vercel.app/
+### Digital Boutique Showcase & Inventory Platform
 
----
+**A production-ready digital showroom and inventory back-office for a physical clothing boutique.**
+Customers browse and fall in love online — then call, message, or walk in to buy.
+The shop owner runs the entire catalogue, CMS, and analytics from one admin dashboard.
 
-## Table of Contents
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Screenshots (What you get)](#screenshots-what-you-get)
-- [Tech Stack](#tech-stack)
-- [Folder Structure](#folder-structure)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Admin / Demo Credentials](#admin--demo-credentials)
-- [Seed Data](#seed-data)
-- [REST API Reference](#rest-api-reference)
-- [Data Models](#data-models)
-- [Frontend Architecture](#frontend-architecture)
-- [Design System](#design-system)
-- [Security](#security)
-- [Testing](#testing)
-- [Roadmap / Backlog](#roadmap--backlog)
-- [FAQ](#faq)
-- [License](#license)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=flat-square&logo=fastapi&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Motor-47A248?style=flat-square&logo=mongodb&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white)
+![TanStack Query](https://img.shields.io/badge/TanStack%20Query-5-FF4154?style=flat-square&logo=reactquery&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+
+[**🔗 Live Demo**](https://style-hub-tau-ruby.vercel.app/) · [Admin Login](https://style-hub-tau-ruby.vercel.app/admin/login) · [Report an Issue](#-faq)
+
+</div>
 
 ---
 
-## Overview
+> **Not an e-commerce site.** There is intentionally **no cart and no online checkout** — StyleHub is a digital showroom. Customers discover, filter, and shortlist products, then reserve or buy in person via **Call / WhatsApp / Visit**.
 
-**StyleHub** is a luxury-fashion **digital showroom** for a single boutique.
-Customers use it to discover products, filter, save to a wishlist, and then **Call / WhatsApp / Visit**
-the store to reserve or buy. There is **no cart and no online checkout by design** — the entire
-purchase flow happens in-store.
+## 📑 Table of Contents
 
-Behind the scenes, the shop owner uses a full admin dashboard to manage:
-
-- Products, categories, brands, inventory (with stock adjustments & low-stock alerts)
-- Offers, homepage banners, gallery images, testimonials
-- Customer inquiries (contact form triage)
-- Store settings (name, tagline, address, business hours, map coords, socials, about)
-- Analytics (top-viewed products, stock value, by-category distribution)
+- [Preview](#-preview)
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
+- [Folder Structure](#-folder-structure)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [Admin / Demo Credentials](#-admin--demo-credentials)
+- [Seed Data](#-seed-data)
+- [REST API Reference](#-rest-api-reference)
+- [Data Models](#-data-models)
+- [Frontend Architecture](#-frontend-architecture)
+- [Design System](#-design-system)
+- [Security](#-security)
+- [Testing](#-testing)
+- [Roadmap](#-roadmap)
+- [FAQ](#-faq)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
-## Key Features
+## 🖼️ Preview
+
+<div align="center">
+
+| Home | Products |
+|:---:|:---:|
+| ![Home page](docs/screenshots/home.png) | ![Products listing](docs/screenshots/products.png) |
+| Editorial hero, new arrivals, best sellers, gallery & testimonials | Sidebar filters, sortable grid, image-zoom on hover |
+
+| Product Detail | Admin Dashboard |
+|:---:|:---:|
+| ![Product detail](docs/screenshots/product-detail.png) | ![Admin dashboard](docs/screenshots/admin-dashboard.png) |
+| Multi-image gallery, size/color pickers, in-store CTAs | KPI cards, category chart, most-viewed products |
+
+</div>
+
+> 📸 Drop your own captures into `docs/screenshots/` using the filenames above (recommended: **1280×800px, PNG**) and they'll render automatically here. Good pages to capture: `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/login`, `/admin`.
+
+---
+
+## ✨ Overview
+
+**StyleHub** is a luxury-fashion digital showroom built for a single boutique. Customers use it to discover products, filter by what matters to them, save favorites to a wishlist, and reach out to the store to reserve or buy — the entire purchase moment happens in person.
+
+Behind the scenes, the shop owner gets a full admin dashboard to manage:
+
+- 🧥 Products, categories, brands, and inventory — with stock adjustments and low-stock alerts
+- 🏷️ Offers, homepage banners, gallery images, and testimonials
+- 💬 Customer inquiries, triaged by status
+- ⚙️ Store settings — name, tagline, address, business hours, map coordinates, socials, about
+- 📊 Analytics — top-viewed products, stock value, category distribution
+
+---
+
+## 🔑 Key Features
 
 ### Public Site (customer-facing)
+
 | Area | Features |
 |---|---|
-| **Home** | Editorial hero, category strip, new arrivals bento, trending, promo banner, best sellers, editor's edit, brands marquee, offers, gallery, testimonials, hours + Google map |
-| **Products** | Filter by category, brand, gender, price range, and collection flags (Featured / New / Trending / Best Seller / On Offer). Sort by newest / price / name. URL-driven filters (shareable). |
-| **Product Detail** | Multi-image gallery + zoom modal, size & color pickers, WhatsApp / Call / Visit / Wishlist CTAs, breadcrumb, material/pattern/fit details, care instructions, related products, share/copy-link |
-| **Categories / Brands / Offers / Gallery** | Dedicated listing pages with editorial layouts. Gallery has category tabs + lightbox. |
-| **About / Contact / Privacy / Terms / 404** | Full page set. Contact form persists to DB. |
-| **Wishlist** | Local (browser) — no login required. Persistent across sessions via `localStorage`. Counter shown in navbar. |
-| **Newsletter** | Footer form → backend, deduped by email. |
-| **Theme** | Light / dark mode toggle, persisted. |
-| **Currency** | Indian Rupee (₹) with `en-IN` digit grouping (e.g. ₹1,29,000). |
+| **Home** | Editorial hero, category strip, new-arrivals bento, trending section, promo banner, best sellers, editor's edit, brands marquee, offers, gallery, testimonials, business hours + Google map |
+| **Products** | Filter by category, brand, gender, price range, and collection flags (Featured / New / Trending / Best Seller / On Offer). Sort by newest, price, or name. Filters are URL-driven and shareable. |
+| **Product Detail** | Multi-image gallery with click-to-zoom modal, size & color pickers, WhatsApp / Call / Visit / Wishlist CTAs, breadcrumb, material/pattern/fit details, care instructions, related products, share/copy-link |
+| **Categories / Brands / Offers / Gallery** | Dedicated listing pages with editorial layouts. Gallery includes category tabs and a lightbox. |
+| **About / Contact / Privacy / Terms / 404** | Full supporting page set. Contact form persists directly to the database. |
+| **Wishlist** | Browser-local, no login required. Persists across sessions via `localStorage`, with a live counter in the navbar. |
+| **Newsletter** | Footer subscription form → backend, deduplicated by email. |
+| **Theme** | Light / dark mode toggle, persisted across visits. |
+| **Currency** | Indian Rupee (₹) formatted with `en-IN` digit grouping, e.g. `₹1,29,000`. |
 
 ### Admin Dashboard (owner-only)
+
 | Area | Features |
 |---|---|
-| **Login** | JWT auth, demo credentials pre-filled. |
-| **Dashboard** | 8 metric cards (Products, Categories, Brands, Offers, Inquiries, Low Stock, Newsletter, Stock Value), by-category bar chart (Recharts), most-viewed products list. |
-| **Products** | Rich table with thumbnails; inline stock +/− buttons; full modal form with all fields, flags, multi-image URLs, image previews; create/update/delete. Low-stock filter (`?low=1`). |
-| **Categories / Brands / Offers / Banners / Gallery / Testimonials** | Table + modal form CRUD (powered by a reusable `CrudManager`). |
-| **Inquiries** | Tabbed by status (new / read / replied / archived), detail modal with mailto/tel links, status transitions, delete. |
-| **Store Settings** | Edit store name, tagline, about, email, phone, WhatsApp, address, city/country, map coords, business hours (7-day), 4 social links. |
+| **Login** | JWT-based auth, demo credentials pre-filled for convenience. |
+| **Dashboard** | 8 metric cards (Products, Categories, Brands, Offers, Inquiries, Low Stock, Newsletter, Stock Value), a by-category bar chart (Recharts), and a most-viewed products list. |
+| **Products** | Rich table with thumbnails, inline stock +/− buttons, and a full modal form covering every field, flag, and image URL with live previews. Low-stock filter via `?low=1`. |
+| **Categories / Brands / Offers / Banners / Gallery / Testimonials** | Table + modal CRUD, all powered by a single reusable `CrudManager` component. |
+| **Inquiries** | Tabbed by status (new / read / replied / archived), with a detail modal, mailto/tel quick links, status transitions, and delete. |
+| **Store Settings** | Edit store name, tagline, about copy, contact details, address, map coordinates, 7-day business hours, and 4 social links. |
 
-### Under the hood
-- Auto-seeded MongoDB on first startup (admin user + 12 products + 6 categories + 6 brands + 3 offers + 3 banners + 6 gallery items + 3 testimonials + default settings).
-- JWT with 7-day expiry, auto-attached via axios interceptor; 401 → auto-redirect to `/admin/login`.
-- Product `views` increment on every detail fetch → surfaces in "most viewed" widget.
-- Stock adjustments log to a `stock_history` collection for future auditing.
-- Search: case-insensitive regex across name / description / SKU / tags.
-- SEO-ready: dynamic meta description, Playfair + Manrope preconnected, semantic markup, proper h1 hierarchy.
+### Under the Hood
 
----
-
-## Screenshots (What you get)
-
-- **Home** — luxury editorial hero, generous whitespace, monochrome + gold accent, Playfair Display headings.
-- **Products** — sidebar filters + sortable grid, image-zoom hover.
-- **Product detail** — multi-image gallery with click-to-zoom modal, size/color selectors, 4 in-store CTAs.
-- **Admin** — dense sidebar layout, tables with inline stock adjust, chart + KPI cards.
-
-Take a screenshot at `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/login`, `/admin`.
+- Auto-seeded MongoDB on first startup — admin user, 12 products, 6 categories, 6 brands, 3 offers, 3 banners, 6 gallery items, 3 testimonials, and default settings.
+- JWT with 7-day expiry, auto-attached via an Axios interceptor; a 401 response redirects to `/admin/login`.
+- Product `views` increments on every detail fetch, surfacing in the "most viewed" widget.
+- Stock adjustments are logged to a `stock_history` collection for future auditing.
+- Search is case-insensitive across name, description, SKU, and tags.
+- SEO-ready: dynamic meta descriptions, preconnected Playfair + Manrope fonts, semantic markup, and proper heading hierarchy.
 
 ---
 
-## Tech Stack
+## 🧱 Tech Stack
 
-### Frontend
-- **React 19** (Create React App via `craco`)
-- **React Router 7** — routing
-- **TanStack Query 5** — server state + caching
-- **Axios** — HTTP client with JWT interceptor
-- **Tailwind CSS 3** + **shadcn/ui** primitives — styling
-- **Framer Motion** — micro-animations
-- **Recharts 3** — analytics chart
-- **Sonner** — toast notifications
-- **Lucide React** — line icons
-- **Playfair Display + Manrope** — typography (Google Fonts)
+**Frontend**
+`React 19` (CRA via `craco`) · `React Router 7` · `TanStack Query 5` · `Axios` · `Tailwind CSS 3` + `shadcn/ui` · `Framer Motion` · `Recharts 3` · `Sonner` · `Lucide React` · `Playfair Display` + `Manrope`
 
-### Backend
-- **FastAPI 0.110** — async web framework
-- **Motor 3.3** — async MongoDB driver
-- **Pydantic 2** — request/response models & validation
-- **PyJWT** + **bcrypt** — auth
-- **uvicorn** — ASGI server
-- **python-dotenv** — env management
+**Backend**
+`FastAPI 0.110` · `Motor 3.3` (async MongoDB driver) · `Pydantic 2` · `PyJWT` + `bcrypt` · `uvicorn` · `python-dotenv`
 
-### Database
-- **MongoDB** — 12 collections (users, products, categories, brands, offers, gallery, banners, testimonials, inquiries, newsletter, stock_history, settings)
+**Database**
+`MongoDB` — 12 collections: `users`, `products`, `categories`, `brands`, `offers`, `gallery`, `banners`, `testimonials`, `inquiries`, `newsletter`, `stock_history`, `settings`
 
-### Deployment (this preview)
-- **Supervisor** — process manager
-- **Kubernetes ingress** — routes `/api/*` → backend:8001, everything else → frontend:3000
-- Hot reload enabled for both services
+**Deployment (this preview)**
+`Supervisor` process manager · Kubernetes ingress (`/api/*` → backend:8001, everything else → frontend:3000) · hot reload enabled on both services
 
 ---
 
-## Folder Structure
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    subgraph Client["Browser"]
+        A[Public Site<br/>React 19]
+        B[Admin Dashboard<br/>React 19]
+    end
+
+    subgraph Ingress["Kubernetes Ingress"]
+        I1["/api/* → backend:8001"]
+        I2["/*  → frontend:3000"]
+    end
+
+    subgraph Server["FastAPI Backend :8001"]
+        R[Routes & Auth<br/>JWT + bcrypt]
+        S[seed_database]
+    end
+
+    DB[(MongoDB<br/>12 collections)]
+
+    A -->|axios| I1
+    B -->|axios + JWT| I1
+    A --> I2
+    B --> I2
+    I1 --> R
+    R <--> DB
+    S -.seeds on boot.-> DB
+```
+
+---
+
+## 📂 Folder Structure
 
 ```
 /app
@@ -185,6 +228,8 @@ Take a screenshot at `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/log
 │   │           ├── AdminInquiries.jsx
 │   │           └── AdminSettings.jsx
 │   └── package.json
+├── docs/
+│   └── screenshots/                # Drop preview images here (see Preview section)
 ├── memory/
 │   ├── PRD.md
 │   └── test_credentials.md
@@ -193,12 +238,12 @@ Take a screenshot at `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/log
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
-The Emergent preview environment already runs this app under **supervisor**. Nothing to install.
-The steps below are only for self-hosting.
+> The Emergent preview environment already runs this app under **supervisor** — there's nothing to install. The steps below are only for self-hosting.
 
 ### Prerequisites
+
 - Python **3.11+**
 - Node **18+** and **yarn**
 - **MongoDB** running locally on `mongodb://localhost:27017` (or set `MONGO_URL`)
@@ -211,8 +256,7 @@ pip install -r requirements.txt
 uvicorn server:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-On first startup, `seed_database()` populates the admin user, categories, brands, products,
-offers, banners, gallery, and testimonials automatically.
+On first startup, `seed_database()` automatically populates the admin user, categories, brands, products, offers, banners, gallery, and testimonials.
 
 ### 2. Frontend
 
@@ -224,32 +268,32 @@ yarn start        # serves on http://localhost:3000
 
 ### 3. Open
 
-- Public site: `http://localhost:3000`
-- Admin login: `http://localhost:3000/admin/login`
+- Public site → `http://localhost:3000`
+- Admin login → `http://localhost:3000/admin/login`
 
 ---
 
-## Environment Variables
+## 🔐 Environment Variables
 
-### `backend/.env`
-```
+**`backend/.env`**
+```env
 MONGO_URL="mongodb://localhost:27017"
 DB_NAME="test_database"
 CORS_ORIGINS="*"
 JWT_SECRET="change-me-in-production"
 ```
 
-### `frontend/.env`
-```
+**`frontend/.env`**
+```env
 REACT_APP_BACKEND_URL=https://<your-backend-host>
 WDS_SOCKET_PORT=443
 ```
 
-> `REACT_APP_BACKEND_URL` must **not** include `/api` — the client appends it automatically.
+> ⚠️ `REACT_APP_BACKEND_URL` must **not** include `/api` — the client appends it automatically.
 
 ---
 
-## Admin / Demo Credentials
+## 👤 Admin / Demo Credentials
 
 Seeded on first backend boot. The login form pre-fills them for convenience.
 
@@ -260,41 +304,43 @@ Seeded on first backend boot. The login form pre-fills them for convenience.
 | Password | `Admin@12345` |
 | Role | `admin` |
 
-> Change the password by updating the `users` collection or by editing `seed_database()` and re-seeding after clearing MongoDB.
+> 🔒 **Before deploying to production:** rotate `JWT_SECRET`, change this password (update the `users` collection, or edit `seed_database()` and reseed against a cleared database), and restrict `CORS_ORIGINS`.
 
 ---
 
-## Seed Data
+## 🌱 Seed Data
 
-Auto-created on backend startup (idempotent — only inserts if the collection is empty):
+Auto-created on backend startup — idempotent, only inserts if the collection is empty.
 
 | Collection | Count | Notes |
 |---|---|---|
 | `users` | 1 | Admin owner |
 | `categories` | 6 | Outerwear, Knitwear, Dresses, Shirts, Trousers, Accessories |
 | `brands` | 6 | Maison Vela, Nord & Line, Atelier Kōgei, Ravello, House of Ember, Studio Neuve |
-| `products` | 12 | Realistic garments with SKUs, sizes, colors, flags, multiple images |
+| `products` | 12 | Realistic garments with SKUs, sizes, colors, flags, and multiple images |
 | `offers` | 3 | Cashmere Week, First-Look, Silk Slip Trio |
 | `banners` | 3 | 2 hero + 1 promo |
 | `gallery` | 6 | Store / event / product |
-| `testimonials` | 3 | With avatar, quote, role |
-| `settings` | 1 | Default SoHo boutique (edit in `/admin/settings`) |
+| `testimonials` | 3 | With avatar, quote, and role |
+| `settings` | 1 | Default SoHo boutique — edit in `/admin/settings` |
 
-To reseed: `mongosh <db>` → `db.dropDatabase()` → restart backend.
+To reseed: `mongosh <db>` → `db.dropDatabase()` → restart the backend.
 
 ---
 
-## REST API Reference
+## 🔌 REST API Reference
 
 Base URL: `${REACT_APP_BACKEND_URL}/api`
 
 ### Auth
+
 | Method | Path | Auth | Purpose |
 |---|---|---|---|
 | POST | `/auth/login` | Public | Returns `{ access_token, token_type, user }` |
 | GET | `/auth/me` | Bearer | Current admin |
 
 ### Products
+
 | Method | Path | Auth | Purpose |
 |---|---|---|---|
 | GET | `/products` | Public | List with filters (see below) |
@@ -305,13 +351,15 @@ Base URL: `${REACT_APP_BACKEND_URL}/api`
 | DELETE | `/products/{id}` | Admin | Delete |
 | POST | `/products/{id}/stock?delta=N` | Admin | Adjust stock (± N), logs to `stock_history` |
 
-**`GET /products` query params**: `q, category_id, brand_id, gender, min_price, max_price, size, color, featured, trending, new_arrival, best_seller, on_offer, active, sort (newest|price_asc|price_desc|name), limit, skip`
+**`GET /products` query params:** `q, category_id, brand_id, gender, min_price, max_price, size, color, featured, trending, new_arrival, best_seller, on_offer, active, sort (newest|price_asc|price_desc|name), limit, skip`
 
-### Generic CRUD endpoints (same shape)
-- `GET|POST` `/categories`, `/brands`, `/offers`, `/gallery`, `/banners`, `/testimonials`
-- `GET|PUT|DELETE` `/{resource}/{id}` (writes are admin-only)
+### Generic CRUD Endpoints (same shape)
+
+- `GET|POST` → `/categories`, `/brands`, `/offers`, `/gallery`, `/banners`, `/testimonials`
+- `GET|PUT|DELETE` → `/{resource}/{id}` (writes are admin-only)
 
 ### Inquiries & Newsletter
+
 | Method | Path | Auth | Purpose |
 |---|---|---|---|
 | POST | `/inquiries` | Public | Submit contact form |
@@ -321,15 +369,16 @@ Base URL: `${REACT_APP_BACKEND_URL}/api`
 | POST | `/newsletter` | Public | Subscribe email (deduped) |
 
 ### Settings & Analytics
+
 | Method | Path | Auth | Purpose |
 |---|---|---|---|
 | GET | `/settings` | Public | Store settings |
 | PUT | `/settings` | Admin | Update settings |
-| GET | `/analytics/summary` | Admin | KPIs + by-category + top viewed |
+| GET | `/analytics/summary` | Admin | KPIs + by-category + top-viewed |
 
-All list endpoints return `{ items: [...], total: N }`.
+> All list endpoints return `{ items: [...], total: N }`.
 
-### Example: authenticated request
+### Example: Authenticated Request
 
 ```bash
 API=https://your-host
@@ -349,11 +398,12 @@ curl -s -X POST "$API/api/products/<id>/stock?delta=-2" -H "Authorization: Beare
 
 ---
 
-## Data Models
+## 🗂️ Data Models
 
 All documents use a **UUID `id`** as the primary key (not MongoDB's `_id`) and store timestamps as ISO strings (`created_at`, `updated_at`).
 
 ### Product
+
 ```json
 {
   "id": "uuid",
@@ -370,96 +420,104 @@ All documents use a **UUID `id`** as the primary key (not MongoDB's `_id`) and s
   "discount_price": 990,
   "stock": 8,
   "low_stock_threshold": 5,
-  "sizes": ["XS","S","M","L"],
-  "colors": ["Ivory","Camel"],
+  "sizes": ["XS", "S", "M", "L"],
+  "colors": ["Ivory", "Camel"],
   "material": "100% Cashmere",
   "pattern": "Solid",
   "fit": "Relaxed",
   "sleeve": "Long",
   "washing_instructions": "Dry clean only.",
-  "images": ["https://...","..."],
+  "images": ["https://...", "..."],
   "featured": true,
   "trending": true,
   "new_arrival": true,
   "best_seller": false,
   "on_offer": true,
   "active": true,
-  "tags": ["luxury","winter","cashmere"],
+  "tags": ["luxury", "winter", "cashmere"],
   "views": 42,
   "created_at": "...",
   "updated_at": "..."
 }
 ```
 
-Other models (Category, Brand, Offer, Banner, Gallery, Testimonial, Inquiry, Settings) follow the same conventions — see `backend/server.py` for the exact Pydantic classes.
+Other models (`Category`, `Brand`, `Offer`, `Banner`, `Gallery`, `Testimonial`, `Inquiry`, `Settings`) follow the same conventions — see `backend/server.py` for the exact Pydantic classes.
 
 ---
 
-## Frontend Architecture
+## 🧩 Frontend Architecture
 
-- **Providers stack** (in `App.js`): `ThemeProvider → AuthProvider → WishlistProvider → BrowserRouter`
+- **Provider stack** (in `App.js`): `ThemeProvider → AuthProvider → WishlistProvider → BrowserRouter`
 - **Layouts**: `PublicLayout` (Navbar + Outlet + Footer) and `AdminLayout` (Sidebar + Outlet)
-- **Data fetching**: `TanStack Query` everywhere. Cache invalidation on mutation success.
-- **Forms**: Uncontrolled `react-hook-form` where useful; plain useState for admin CRUD modal forms.
-- **Toasts**: `sonner` (bottom-right).
-- **Money formatting**: `formatINR()` in `lib/format.js` — always use this instead of hard-coding `₹` / `$`.
-- **Test IDs**: Every interactive element has a `data-testid` (kebab-case). Ideal for E2E automation.
+- **Data fetching**: TanStack Query everywhere, with cache invalidation on mutation success
+- **Forms**: uncontrolled `react-hook-form` where useful; plain `useState` for admin CRUD modal forms
+- **Toasts**: `sonner`, bottom-right
+- **Money formatting**: always use `formatINR()` from `lib/format.js` instead of hard-coding `₹` / `$`
+- **Test IDs**: every interactive element carries a kebab-case `data-testid`, ideal for E2E automation
 
-### Adding a new admin CRUD page
-1. Add Pydantic model + generic route in `backend/server.py` (use `crud_router()`).
-2. Create a new file under `pages/admin/`, define `DEFAULT_ITEM`, `FIELDS`, `COLUMNS` as module-level constants.
-3. Return `<CrudManager />` with the endpoint, testIdPrefix, and configs.
+### Adding a New Admin CRUD Page
+
+1. Add a Pydantic model + generic route in `backend/server.py` (use `crud_router()`).
+2. Create a new file under `pages/admin/`, defining `DEFAULT_ITEM`, `FIELDS`, and `COLUMNS` as module-level constants.
+3. Return `<CrudManager />` with the endpoint, `testIdPrefix`, and configs.
 4. Register the route in `App.js` and add the link in `AdminLayout.jsx`.
 
 ---
 
-## Design System
+## 🎨 Design System
 
 ### Palette (light theme)
-- Background: `#FCFCFA` (off-white paper)
-- Foreground: `#0A0A0A` (near-black)
-- Secondary: `#F3F2F0`
-- Muted: `#EAE8E3`
-- Gold accent: `hsl(39 42% 55%)` (period-only, editorial dot on the logo, offer eyebrows)
 
-Dark theme mirrors the same tones on a `#0F0F0F` background.
+| Token | Value | Swatch |
+|---|---|---|
+| Background | `#FCFCFA` (off-white paper) | ![#FCFCFA](https://img.shields.io/badge/-FCFCFA-FCFCFA?style=flat-square) |
+| Foreground | `#0A0A0A` (near-black) | ![#0A0A0A](https://img.shields.io/badge/-0A0A0A-0A0A0A?style=flat-square) |
+| Secondary | `#F3F2F0` | ![#F3F2F0](https://img.shields.io/badge/-F3F2F0-F3F2F0?style=flat-square) |
+| Muted | `#EAE8E3` | ![#EAE8E3](https://img.shields.io/badge/-EAE8E3-EAE8E3?style=flat-square) |
+| Gold accent | `hsl(39 42% 55%)` | ![gold](https://img.shields.io/badge/-C8A05C-C8A05C?style=flat-square) |
+
+Used sparingly — the period on the logo, the editorial dot, offer eyebrows. Dark theme mirrors the same tones on a `#0F0F0F` background.
 
 ### Typography
-- **Headings**: `Playfair Display` — 400 / 500 / 700 / 900, tight tracking
-- **Body / UI**: `Manrope` — 300–700
-- **Eyebrow labels**: uppercase, `tracking-[0.24em]`, small caps feel
+
+- **Headings** — `Playfair Display`, weights 400 / 500 / 700 / 900, tight tracking
+- **Body / UI** — `Manrope`, weights 300–700
+- **Eyebrow labels** — uppercase, `tracking-[0.24em]`, small-caps feel
 
 ### Motion
-- `image-zoom-wrap` hover: 6% scale on 700ms cubic-bezier
-- `link-underline`: expanding underline on hover
-- `.reveal`: 0.9s upward fade entrance
-- `marquee-track`: 40s linear infinite (brands strip)
+
+- `.image-zoom-wrap` — 6% scale on hover, 700ms cubic-bezier
+- `.link-underline` — expanding underline on hover
+- `.reveal` — 0.9s upward fade entrance
+- `.marquee-track` — 40s linear infinite (brands strip)
 - Respects `prefers-reduced-motion`
 
-### Rules of the house
-- No purple/violet gradients, no Inter body, no centered `text-align: center` on `.App`.
-- Sharp corners (`--radius: 0`) — the aesthetic is editorial, not "app-y".
-- Generous whitespace: `container-x` = `max-w-[1440px]` with `px-6 → px-14`.
+### Rules of the House
+
+- No purple/violet gradients, no Inter for body text, no centered `text-align: center` on `.App`
+- Sharp corners (`--radius: 0`) — the aesthetic is editorial, not "app-y"
+- Generous whitespace: `.container-x` = `max-w-[1440px]` with `px-6 → px-14`
 
 ---
 
-## Security
+## 🛡️ Security
 
-- **Passwords**: bcrypt hashed (`bcrypt.gensalt()`), never stored in plaintext.
-- **JWT**: HS256, 7-day expiry, signed with `JWT_SECRET`. Rotate on production.
-- **CORS**: configurable via `CORS_ORIGINS` env var.
-- **Input validation**: Pydantic 2 on every write endpoint; enum on gender field.
-- **Admin-only writes**: `Depends(get_current_admin)` on every mutating admin endpoint.
-- **Views increment** does not leak product data — public.
-- **XSS**: React escapes by default; no `dangerouslySetInnerHTML` used.
-- **Rate limiting / CSRF**: intentionally deferred — see backlog.
+- **Passwords** — bcrypt hashed (`bcrypt.gensalt()`), never stored in plaintext
+- **JWT** — HS256, 7-day expiry, signed with `JWT_SECRET`; rotate before production
+- **CORS** — configurable via the `CORS_ORIGINS` env var
+- **Input validation** — Pydantic 2 on every write endpoint, with enum validation on the gender field
+- **Admin-only writes** — every mutating admin endpoint is guarded by `Depends(get_current_admin)`
+- **View counter** — increments publicly without leaking product data
+- **XSS** — React escapes by default; `dangerouslySetInnerHTML` is never used
+- **Rate limiting / CSRF** — intentionally deferred, see [Roadmap](#-roadmap)
 
 ---
 
-## Testing
+## ✅ Testing
 
 ### Backend (pytest)
-25 tests covering auth, products (CRUD + filters + slug + related + stock), all CRUD resources, inquiries, newsletter dedupe, settings, analytics.
+
+25 tests covering auth, products (CRUD + filters + slug + related + stock), all CRUD resources, inquiries, newsletter dedupe, settings, and analytics.
 
 ```bash
 cd backend
@@ -467,10 +525,11 @@ pytest tests/ -v
 ```
 
 ### Frontend (E2E via automated test agent)
-100% pass on documented flows in `PRD.md`. Every interactive element carries a `data-testid`
-attribute (see `AdminLogin.jsx`, `ProductDetail.jsx`, etc. for naming conventions).
+
+100% pass rate on documented flows in `PRD.md`. Every interactive element carries a `data-testid` attribute (see `AdminLogin.jsx`, `ProductDetail.jsx`, etc. for naming conventions).
 
 ### Lint
+
 ```bash
 # Frontend
 cd frontend && yarn lint     # ESLint — currently zero errors, zero warnings
@@ -478,3 +537,63 @@ cd frontend && yarn lint     # ESLint — currently zero errors, zero warnings
 # Backend
 ruff check backend/ || flake8 backend/
 ```
+
+---
+
+## 🗺️ Roadmap
+
+Suggested next steps, based on items already flagged as deferred above:
+
+- [ ] Rate limiting on public write endpoints (`/inquiries`, `/newsletter`)
+- [ ] CSRF protection for admin mutations
+- [ ] Native image upload (currently URL-only) with storage integration
+- [ ] Pagination for large admin tables (currently full-list)
+- [ ] Multi-currency support alongside INR
+- [ ] Role-based access (e.g. staff vs. owner) beyond the single admin role
+- [ ] Automated screenshot generation for this README
+
+> This section is a starting point — adjust it to match your actual priorities.
+
+---
+
+## ❓ FAQ
+
+**Why is there no cart or checkout?**
+By design. StyleHub is a discovery layer for a physical boutique — the goal is to drive calls, WhatsApp messages, and store visits, not replace the in-person buying experience.
+
+**How do I reset the admin password?**
+Update the corresponding document in the `users` collection directly, or edit the credentials in `seed_database()` and reseed against a freshly cleared database.
+
+**Can I run this without MongoDB running locally?**
+Yes — point `MONGO_URL` in `backend/.env` at any reachable MongoDB instance (e.g. Atlas).
+
+**Where do wishlist items live?**
+In the browser's `localStorage`, per device — there's no account system on the public site, so wishlists aren't synced across devices.
+
+**Is the seed data safe to keep in production?**
+No — treat it as a starting template. Replace the demo admin credentials, products, and settings before going live.
+
+---
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome. Before opening a PR:
+
+1. Run the backend test suite (`pytest tests/ -v`) and frontend lint (`yarn lint`).
+2. Keep new admin pages consistent with the `CrudManager` pattern described in [Frontend Architecture](#-frontend-architecture).
+3. Follow the existing `data-testid` naming convention for any new interactive elements.
+
+---
+
+## 📄 License
+
+This project is provided as a template/starting point. Add your license of choice here (e.g. MIT) before distributing or open-sourcing it.
+
+---
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for accessible UI primitives
+- [Lucide](https://lucide.dev/) for icons
+- [Google Fonts](https://fonts.google.com/) for Playfair Display & Manrope
+- [Recharts](https://recharts.org/) for the admin analytics chart

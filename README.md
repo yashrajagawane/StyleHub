@@ -61,8 +61,8 @@ The shop owner runs the entire catalogue, CMS, and analytics from one admin dash
 | **Product Detail** — multi-image gallery, size/color pickers, in-store CTAs | **Inquiries** — status tabs, detail modal, mailto/tel quick actions |
  
 </div>
-> 📸 Drop your own captures into `docs/screenshots/` using the filenames above (recommended: **1280×800px, PNG**) and they'll render automatically here. Good pages to capture: `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/login`, `/admin`.
-
+> 📸 Drop your own captures into `docs/screenshots/` using the filenames above (recommended: **1280×800px, PNG**) and they'll render automatically here. Good pages to capture: `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/login`, `/admin`, `/admin/products`, `/admin/inquiries`.
+ 
 ---
 
 ## ✨ Overview

@@ -51,19 +51,14 @@ The shop owner runs the entire catalogue, CMS, and analytics from one admin dash
 ## 🖼️ Preview
  
 <div align="center">
-**Public Site**
- 
-| Home | Products | Product Detail |
-|:---:|:---:|:---:|
-| ![Home page](docs/screenshots/home.png) | ![Products listing](docs/screenshots/products.png) | ![Product detail](docs/screenshots/product-detail.png) |
-| Editorial hero, new arrivals, gallery & testimonials | Sidebar filters, sortable grid, image-zoom on hover | Multi-image gallery, size/color pickers, in-store CTAs |
- 
-**Admin Dashboard**
- 
-| Dashboard | Products | Inquiries |
-|:---:|:---:|:---:|
-| ![Admin dashboard](docs/screenshots/admin-dashboard.png) | ![Admin products](docs/screenshots/admin-products.png) | ![Admin inquiries](docs/screenshots/admin-inquiries.png) |
-| KPI cards, category chart, most-viewed products | Inline stock adjust, modal CRUD form, low-stock filter | Status tabs, detail modal, mailto/tel quick actions |
+| Public Site | Admin Dashboard |
+|:---:|:---:|
+| ![Home page](docs/screenshots/home.png) | ![Admin dashboard](docs/screenshots/admin-dashboard.png) |
+| **Home** — editorial hero, new arrivals, gallery & testimonials | **Dashboard** — KPI cards, category chart, most-viewed products |
+| ![Products listing](docs/screenshots/products.png) | ![Admin products](docs/screenshots/admin-products.png) |
+| **Products** — sidebar filters, sortable grid, image-zoom on hover | **Products** — inline stock adjust, modal CRUD form, low-stock filter |
+| ![Product detail](docs/screenshots/product-detail.png) | ![Admin inquiries](docs/screenshots/admin-inquiries.png) |
+| **Product Detail** — multi-image gallery, size/color pickers, in-store CTAs | **Inquiries** — status tabs, detail modal, mailto/tel quick actions |
  
 </div>
 > 📸 Drop your own captures into `docs/screenshots/` using the filenames above (recommended: **1280×800px, PNG**) and they'll render automatically here. Good pages to capture: `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/login`, `/admin`.

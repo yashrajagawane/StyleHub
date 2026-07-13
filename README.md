@@ -581,18 +581,3 @@ Issues and pull requests are welcome. Before opening a PR:
 1. Run the backend test suite (`pytest tests/ -v`) and frontend lint (`yarn lint`).
 2. Keep new admin pages consistent with the `CrudManager` pattern described in [Frontend Architecture](#-frontend-architecture).
 3. Follow the existing `data-testid` naming convention for any new interactive elements.
-
----
-
-## 📄 License
-
-This project is provided as a template/starting point. Add your license of choice here (e.g. MIT) before distributing or open-sourcing it.
-
----
-
-## 🙏 Acknowledgments
-
-- [shadcn/ui](https://ui.shadcn.com/) for accessible UI primitives
-- [Lucide](https://lucide.dev/) for icons
-- [Google Fonts](https://fonts.google.com/) for Playfair Display & Manrope
-- [Recharts](https://recharts.org/) for the admin analytics chart

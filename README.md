@@ -4,7 +4,7 @@
 > **Not** an e-commerce site: customers browse online, then visit the store to buy. The shop owner runs
 > the entire catalogue, CMS, and analytics from a single admin dashboard.
 
-Live demo: `https://0d918a48-7fe6-4bcb-b039-282e9940c626.preview.emergentagent.com`
+Live demo: `https://style-hub-tau-ruby.vercel.app/`
 
 ---
 

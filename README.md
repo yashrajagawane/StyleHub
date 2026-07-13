@@ -49,8 +49,9 @@ The shop owner runs the entire catalogue, CMS, and analytics from one admin dash
 ---
 
 ## 🖼️ Preview
- 
+
 <div align="center">
+
 | Public Site | Admin Dashboard |
 |:---:|:---:|
 | ![Home page](docs/screenshots/home.png) | ![Admin dashboard](docs/screenshots/admin-dashboard.png) |
@@ -59,10 +60,11 @@ The shop owner runs the entire catalogue, CMS, and analytics from one admin dash
 | **Products** — sidebar filters, sortable grid, image-zoom on hover | **Products** — inline stock adjust, modal CRUD form, low-stock filter |
 | ![Product detail](docs/screenshots/product-detail.png) | ![Admin inquiries](docs/screenshots/admin-inquiries.png) |
 | **Product Detail** — multi-image gallery, size/color pickers, in-store CTAs | **Inquiries** — status tabs, detail modal, mailto/tel quick actions |
- 
+
 </div>
+
 > 📸 Drop your own captures into `docs/screenshots/` using the filenames above (recommended: **1280×800px, PNG**) and they'll render automatically here. Good pages to capture: `/`, `/products`, `/products/onyx-wool-blazer`, `/admin/login`, `/admin`, `/admin/products`, `/admin/inquiries`.
- 
+
 ---
 
 ## ✨ Overview
@@ -581,3 +583,16 @@ Issues and pull requests are welcome. Before opening a PR:
 3. Follow the existing `data-testid` naming convention for any new interactive elements.
 
 ---
+
+## 📄 License
+
+This project is provided as a template/starting point. Add your license of choice here (e.g. MIT) before distributing or open-sourcing it.
+
+---
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for accessible UI primitives
+- [Lucide](https://lucide.dev/) for icons
+- [Google Fonts](https://fonts.google.com/) for Playfair Display & Manrope
+- [Recharts](https://recharts.org/) for the admin analytics chart
